@@ -1,23 +1,30 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import axios from 'axios';
+// import ReactDOM from 'react-dom';
 import Header from './Header';
+import ContestPreview from './ContestPreview';
+// import data from '../testData';
 
 class App extends React.Component {
 
 	state = {
-		pageHeader: 'Naming Contests'
+		pageHeader: 'Naming Contests',
+		contests: []
 	};
 
 	componentDidMount() {
 
-		// ajax
-		// timers
-		// listeners
-
+		axios.get('api/contests')
+			.then(resp => {
+				this.setState({
+					contests: resp.data.contests
+				});
+				// console.log(resp.data.contests);
+			})
+			.catch(console.error)
 	}
 
 	componentWillUnmount() {
-
 		// clean timers and listeners.
 	}
 
@@ -26,7 +33,9 @@ class App extends React.Component {
 			<div className="App">
 				<Header message={ this.state.pageHeader } />
 				<div>
-					...
+					{ this.state.contests.map(contest =>
+						<ContestPreview key={contest.id} { ...contest } />
+					)}
 				</div>
 			</div>
 		);
@@ -34,3 +43,7 @@ class App extends React.Component {
 }
 
 export default App;
+
+
+
+
